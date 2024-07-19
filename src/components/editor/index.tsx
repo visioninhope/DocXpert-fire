@@ -26,7 +26,7 @@ import {
   TextAlignButton,
   useCreateBlockNote,
 } from "@blocknote/react";
-import LiveblocksProvider from "@liveblocks/yjs";
+import { LiveblocksYjsProvider } from "@liveblocks/yjs";
 import { useCompletion } from "ai/react";
 import { useRoom } from "liveblocks.config";
 import { useEffect, useRef, useState } from "react";
@@ -51,7 +51,7 @@ export default function Editor({
   // Set up Liveblocks Yjs provider
   useEffect(() => {
     const yDoc = new Y.Doc();
-    const yProvider = new LiveblocksProvider(room, yDoc);
+    const yProvider = new LiveblocksYjsProvider(room, yDoc);
 
     setDoc(yDoc);
     setProvider(yProvider);

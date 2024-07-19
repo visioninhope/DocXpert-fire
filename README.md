@@ -1,4 +1,4 @@
-# [Uxie](https://uxie.vercel.app)
+# [docxpert](https://docxpert.vercel.app)
 
 [![thumbnail](./public/thumbnail.png)](https://www.youtube.com/watch?v=m97zcPWSceU)
 
@@ -10,8 +10,8 @@ PDF reader app designed to revolutionise your learning experience!
 - 📚 Integrates with LLM for enhanced learning
 - 💡 Generates flashcards with LLM feedback
 
-Originally started as a hackathon project which I ended up winning 🥇!Uxie has since evolved with even more exciting features.  
-I'd love for you to give Uxie a try and share your valuable [feedback](https://uxie.vercel.app/feedback).
+Originally started as a hackathon project which I ended up winning 🥇!docxpert has since evolved with even more exciting features.  
+I'd love for you to give docxpert a try and share your valuable [feedback](https://docxpert.vercel.app/feedback).
 
 ### Built using
 

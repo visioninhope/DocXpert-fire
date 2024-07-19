@@ -1,5 +1,5 @@
 import fireworks from "@/lib/fireworks";
-import { PDFLoader } from "langchain/document_loaders/fs/pdf";
+import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 
 export const generateFlashcards = async (

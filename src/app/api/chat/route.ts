@@ -4,8 +4,9 @@ import { getPineconeClient } from "@/lib/pinecone";
 import { authOptions } from "@/server/auth";
 import { prisma } from "@/server/db";
 import { OpenAIStream, StreamingTextResponse } from "ai";
-import { HuggingFaceInferenceEmbeddings } from "langchain/embeddings/hf";
-import { PineconeStore } from "langchain/vectorstores/pinecone";
+import OpenAI from 'openai';
+import { HuggingFaceInferenceEmbeddings } from "@langchain/community/embeddings/hf";
+import { PineconeStore } from "@langchain/pinecone";
 import { getServerSession } from "next-auth";
 
 // export const runtime = "edge";
@@ -47,7 +48,7 @@ export async function POST(req: Request, res: Response) {
   });
 
   const pinecone = getPineconeClient();
-  const pineconeIndex = pinecone.Index("uxie");
+  const pineconeIndex = (await pinecone).Index("docxpert");
 
   const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
     pineconeIndex,

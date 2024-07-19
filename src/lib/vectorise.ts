@@ -1,9 +1,9 @@
 import { env } from "@/env.mjs";
 import { getPineconeClient } from "@/lib/pinecone";
 import { prisma } from "@/server/db";
-import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import { HuggingFaceInferenceEmbeddings } from "langchain/embeddings/hf";
-import { PineconeStore } from "langchain/vectorstores/pinecone";
+import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
+import { HuggingFaceInferenceEmbeddings } from "@langchain/community/embeddings/hf";
+import { PineconeStore } from "@langchain/pinecone";
 
 export const vectoriseDocument = async (
   fileUrl: string,
@@ -25,7 +25,7 @@ export const vectoriseDocument = async (
   }
 
   const pinecone = getPineconeClient();
-  const pineconeIndex = pinecone.Index("uxie");
+  const pineconeIndex = (await pinecone).Index("docxpert");
 
   const combinedData = pageLevelDocs.map((document) => {
     return {

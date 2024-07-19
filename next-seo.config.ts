@@ -1,16 +1,16 @@
 export const SEO = {
-  title: "Uxie",
+  title: "DocXpert",
   description: "Revolutionise your Learning Experience.",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "UXIE",
-    // // url: "https://uxie.vercel.app/",
-    siteName: "Uxie",
+    url: "DOCXPERT",
+    // // url: "https://docxpert.vercel.app/",
+    siteName: "docxpert",
     images: [
-      // { url: "https://uxie.vercel.app/logo.png" },
+      // { url: "https://docxpert.vercel.app/logo.png" },
       {
-        url: "https://uxie.vercel.app/og.png",
+        url: "https://docxpert.vercel.app/og.png",
         width: 800,
         height: 600,
         alt: "Og Image",
@@ -27,14 +27,14 @@ export const SEO = {
     },
     {
       name: "application-name",
-      content: "Uxie",
+      content: "DocXpert",
     },
   ],
 
   additionalLinkTags: [
     {
       rel: "icon",
-      href: "https://uxie.vercel.app/favicon.ico",
+      href: "https://docxpert.vercel.app/favicon.ico",
     },
   ],
 };
