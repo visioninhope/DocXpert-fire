@@ -377,4 +377,30 @@ export const documentRouter = createTRPCRouter({
         });
       }
     }),
+    deleteDocument: protectedProcedure
+    .input(z.object({ documentId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const document = await ctx.prisma.document.findUnique({
+        where: { id: input.documentId, ownerId: ctx.session.user.id },
+      });
+  
+      if (!document) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Document not found or you're not the owner.",
+        });
+      }
+  
+      // First, delete all related collaborator records
+      await ctx.prisma.collaborator.deleteMany({
+        where: { documentId: input.documentId },
+      });
+  
+      // Then, delete the document
+      await ctx.prisma.document.delete({ where: { id: input.documentId } });
+  
+      return true;
+    }),
+  
+
 });
