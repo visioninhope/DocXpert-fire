@@ -15,7 +15,7 @@ export function DeleteConfirmationDialog({ isOpen, onClose, onConfirm, documentT
         <DialogHeader>
           <DialogTitle>Confirm Deletion</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete "{documentTitle}"? This action cannot be undone.
+          Are you sure you want to delete &quot;{documentTitle}&quot;? This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
