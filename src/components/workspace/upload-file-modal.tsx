@@ -233,7 +233,7 @@ const Uploader = ({
 
     setUrl("");
     setFile(acceptedFiles[0]);
-  }, []);
+  }, [setUrl, setFile]);
 
   const fileTypes = permittedFileInfo?.config
     ? Object.keys(permittedFileInfo?.config)
