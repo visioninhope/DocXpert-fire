@@ -8,7 +8,7 @@ const TermsAndConditionsPage = () => {
         <p className="text-center text-gray-400 italic mb-8">Last updated on 23-07-2024 19:49:00</p>
         <div className="bg-gray-800 p-6 md:p-8 rounded-lg shadow-md">
           <p className="mb-4 text-gray-300">
-            These Terms and Conditions, along with privacy policy or other terms ("Terms") constitute a binding agreement by and between AKHIL RAJU, ("Website Owner" or "we" or "us" or "our") and you ("you" or "your") and relate to your use of our website, goods (as applicable) or services (as applicable) (collectively, "Services").
+            These Terms and Conditions, along with privacy policy or other terms (&quot;Terms&quot;) constitute a binding agreement by and between AKHIL RAJU, (&quot;Website Owner&quot; or &quot;we&quot; or &quot;us&quot; or &quot;our&quot;) and you (&quot;you&quot; or &quot;your&quot;) and relate to your use of our website, goods (as applicable) or services (as applicable) (collectively, &quot;Services&quot;).
           </p>
           <p className="mb-4 text-gray-300">
             By using our website and availing the Services, you agree that you have read and accepted these Terms (including the Privacy Policy). We reserve the right to modify these Terms at any time and without assigning any reason. It is your responsibility to periodically review these Terms to stay informed of updates.
