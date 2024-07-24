@@ -4,17 +4,17 @@ import Image from 'next/image';
 const testimonials = [
   {
     name: 'Olivia Turner',
-    text: 'ChatWithPDF has transformed how I study. I can ask my textbooks questions and get instant answers. It\'s like having a personal tutor available 24/7!',
+    text: "ChatWithPDF has transformed how I study. I can ask my textbooks questions and get instant answers. It's like having a personal tutor available 24/7!",
     image: '/girl-1.png',
   },
   {
     name: 'Eva Williams',
-    text: 'I often work with documents in PDF format usually, and the functionality offered by ChatWithPDF not only made my daily life a lot easier but also prompted by to write this review. I like how convenient this tool is and how quickly I can find the necessary information even inside huge files.',
+    text: "I often work with documents in PDF format usually, and the functionality offered by ChatWithPDF not only made my daily life a lot easier but also prompted by to write this review. I like how convenient this tool is and how quickly I can find the necessary information even inside huge files.",
     image: '/girl-2.png',
   },
   {
     name: 'Ethan Brooks',
-    text: 'I deal with extensive documents daily as a researcher. ChatWithPDF allows me to extract key information and insights better. It\'s an invaluable tool for my research.',
+    text: "I deal with extensive documents daily as a researcher. ChatWithPDF allows me to extract key information and insights better. It's an invaluable tool for my research.",
     image: '/boy-1.png',
   },
 ];
@@ -27,7 +27,7 @@ const Testimonials: React.FC = () => {
           Trusted by People like You
         </h2>
         <p className="text-center text-gray-300 mb-12">
-          Don't just take our word for it. Here's what some of our users have to say about their experience with ChatWithPDF
+          Don&apos;t just take our word for it. Here&apos;s what some of our users have to say about their experience with ChatWithPDF
         </p>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {testimonials.map((testimonial, index) => (
