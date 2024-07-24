@@ -4,17 +4,17 @@ import Image from 'next/image';
 const testimonials = [
   {
     name: 'Olivia Turner',
-    text: "ChatWithPDF has transformed how I study. I can ask my textbooks questions and get instant answers. It's like having a personal tutor available 24/7!",
+    text: 'ChatWithPDF has transformed how I study. I can ask my textbooks questions and get instant answers. It&apos;s like having a personal tutor available 24/7!',
     image: '/girl-1.png',
   },
   {
     name: 'Eva Williams',
-    text: "I often work with documents in PDF format usually, and the functionality offered by ChatWithPDF not only made my daily life a lot easier but also prompted by to write this review. I like how convenient this tool is and how quickly I can find the necessary information even inside huge files.",
+    text: 'I often work with documents in PDF format usually, and the functionality offered by ChatWithPDF not only made my daily life a lot easier but also prompted by to write this review. I like how convenient this tool is and how quickly I can find the necessary information even inside huge files.',
     image: '/girl-2.png',
   },
   {
     name: 'Ethan Brooks',
-    text: "I deal with extensive documents daily as a researcher. ChatWithPDF allows me to extract key information and insights better. It's an invaluable tool for my research.",
+    text: 'I deal with extensive documents daily as a researcher. ChatWithPDF allows me to extract key information and insights better. It&apos;s an invaluable tool for my research.',
     image: '/boy-1.png',
   },
 ];
