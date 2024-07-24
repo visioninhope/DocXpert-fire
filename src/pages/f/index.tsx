@@ -27,9 +27,9 @@ const UserLibraryPage = () => {
     title: string;
   } | null>(null);
 
-  if (isError) return <div>Something went wrong</div>;
+  if (isError) return <div className="text-red-500">Something went wrong</div>;
   if (isLoading) return <SpinnerPage />;
-  if (!userDocs) return <div>Sorry no result found</div>;
+  if (!userDocs) return <div className="text-gray-500">Sorry no result found</div>;
 
   const combinedUserDocs = [
     ...userDocs?.documents,
@@ -68,72 +68,72 @@ const UserLibraryPage = () => {
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-col px-4 py-2 lg:px-16">
-      <Link
-        href="/"
-        className={cn(
-          buttonVariants({ variant: "ghost" }),
-          "my-2 w-fit justify-start p-2",
-        )}
-      >
-        <ChevronLeftIcon className="mr-2 h-4 w-4" />
-        Back
-      </Link>
-      <div className="flex items-start justify-between md:px-4">
-        <div>
-          <p className="mb-1 text-2xl font-semibold tracking-tighter">
-            Hello, {userDocs?.name || "User"}
-          </p>
-
-          {combinedUserDocs.length === 0 ? (
-            <p className="text-muted-foreground">
-              You have no files yet, upload one now!
-            </p>
-          ) : (
-            <p className="text-muted-foreground">Here are your files</p>
+    <div className="min-h-screen w-full bg-gradient-to-b from-[#0E1016] to-[#111827] text-white px-4 py-6 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <Link
+          href="/"
+          className={cn(
+            buttonVariants({ variant: "ghost" }),
+            "mb-6 w-fit justify-start p-2 text-green-400 hover:text-black"
           )}
-        </div>
-
-        <UploadFileModal
-          docsCount={userDocs.documents.length}
-          refetchUserDocs={refetchUserDocs}
-        />
-      </div>
-
-      {combinedUserDocs.length > 0 && (
-        <div className="mt-2 flex flex-col justify-center md:px-4">
-          <div className="relative my-4">
-            <SearchIcon className="absolute left-3 top-[50%] h-4 w-4 -translate-y-[50%] text-muted-foreground" />
-            <Input
-              className="pl-9"
-              type="search"
-              placeholder="Search for a document"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+        >
+          <ChevronLeftIcon className="mr-2 h-4 w-4" />
+          Back
+        </Link>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+          <div>
+            <p className="text-2xl font-semibold tracking-tighter text-green-400 mb-2">
+              Hello, {userDocs?.name || "User"}
+            </p>
+            <p className="text-gray-400">
+              {combinedUserDocs.length === 0
+                ? "You have no files yet, upload one now!"
+                : "Here are your files"}
+            </p>
+          </div>
+          <div className="mt-4 sm:mt-0">
+            <UploadFileModal
+              docsCount={userDocs.documents.length}
+              refetchUserDocs={refetchUserDocs}
             />
           </div>
-
-          <div className="grid grid-cols-1 gap-2 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 ">
-            {filteredUserDocs?.map((doc) => (
-              <DocCard
-                key={doc.id}
-                id={doc.id}
-                title={doc.title}
-                isCollab={userDocs.collaboratorateddocuments.some(
-                  (collab) => collab.document.id === doc.id,
-                )}
-                onDelete={handleDeleteClick}
-              />
-            ))}
-          </div>
         </div>
-      )}
-      <DeleteConfirmationDialog
-        isOpen={deleteDialogOpen}
-        onClose={() => setDeleteDialogOpen(false)}
-        onConfirm={handleDeleteConfirm}
-        documentTitle={documentToDelete?.title || ""}
-      />
+
+        {combinedUserDocs.length > 0 && (
+          <div className="mt-6">
+            <div className="relative mb-6">
+              <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <Input
+                className="pl-9 bg-gray-800 text-white border-gray-700 focus:border-green-400 w-full"
+                type="search"
+                placeholder="Search for a document"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {filteredUserDocs?.map((doc) => (
+                <DocCard
+                  key={doc.id}
+                  id={doc.id}
+                  title={doc.title}
+                  isCollab={userDocs.collaboratorateddocuments.some(
+                    (collab) => collab.document.id === doc.id
+                  )}
+                  onDelete={handleDeleteClick}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        <DeleteConfirmationDialog
+          isOpen={deleteDialogOpen}
+          onClose={() => setDeleteDialogOpen(false)}
+          onConfirm={handleDeleteConfirm}
+          documentTitle={documentToDelete?.title || ""}
+        />
+      </div>
     </div>
   );
 };
@@ -150,37 +150,33 @@ const DocCard = ({
   onDelete: (id: string, title: string) => void;
 }) => {
   return (
-    <div className="relative">
+    <div className="relative bg-gray-800 text-white rounded-lg shadow-md border border-gray-700">
       <Link
         href={`/f/${id}`}
         className={cn(
           buttonVariants({ variant: "ghost" }),
-          "flex w-full flex-col gap-2 border py-8",
+          "flex w-full flex-col gap-2 py-6 px-4 rounded-lg hover:bg-gray-700"
         )}
       >
-        <p className="mr-auto">
-          {title?.slice(0, 30) + (title.length > 30 ? "..." : "") ?? "Untitled"}{" "}
+        <p className="text-sm sm:text-base break-words">
+          {title?.slice(0, 30) + (title.length > 30 ? "..." : "") ?? "Untitled"}
         </p>
-
         {isCollab && (
-          <Badge className="mr-auto" variant="outline">
-            Collab
-          </Badge>
+          <Badge className="w-fit bg-green-600 text-white text-xs">Collab</Badge>
         )}
       </Link>
       <Button
         variant="ghost"
         size="icon"
-        className="absolute right-2 top-2 h-8 w-8"
+        className="absolute right-2 top-2 h-8 w-8 text-red-400 hover:bg-red-900/20"
         onClick={(e) => {
           e.preventDefault();
           onDelete(id, title);
         }}
       >
-        <Trash2 className="h-4 w-4 text-destructive" />
+        <Trash2 className="h-4 w-4" />
       </Button>
     </div>
   );
 };
-
 export default UserLibraryPage;

@@ -8,8 +8,7 @@ const features = [
   {
     title: "Annotate your documents w. ease",
     imageUrl: "/features/annotation.gif",
-    description:
-      "To create area highlight hold ⌥ Option key (Alt), then click and drag.",
+    description: "To create area highlight hold ⌥ Option key (Alt), then click and drag.",
   },
   {
     title: "Take notes with a notion like editor",
@@ -34,7 +33,7 @@ const features = [
 
 function Features() {
   return (
-    <div className="bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]">
+    <div className="bg-gradient-to-b from-black to-gray-900">
       <div className="mx-auto max-w-6xl px-4 md:block 2xl:max-w-[80%]">
         <div>
           <div className="flex w-full items-start gap-20">
@@ -71,12 +70,10 @@ const FeatureImage = () => {
     typeof features[inViewFeature]?.imageUrl !== "string";
 
   return (
-    <div className="relative aspect-video h-[25%] w-full rounded-2xl bg-gray-100 lg:h-[40%] [&:has(>_.active-card)]:bg-transparent">
-      {!invalidFeature && (
+    <div className="relative aspect-video h-[25%] w-full rounded-2xl bg-gray-900 lg:h-[40%] [&:has(>_.active-card)]:bg-transparent">
+      {!invalidFeature && inViewFeature !== null && features[inViewFeature] && (
         <Image
           alt="feature"
-          // throwing error for some reason ugh
-          // @ts-ignore
           src={features[inViewFeature].imageUrl}
           width={800}
           height={450}
@@ -117,15 +114,15 @@ export const FeatureData = ({ id, title, description }: FeatureDataProps) => {
       ref={ref}
       className={cn(
         "feature-title font-heading py-16 text-4xl font-semibold tracking-tight transition-colors xl:text-5xl 2xl:text-6xl",
-        isInView ? "text-black" : "text-gray-300",
+        isInView ? "text-green-500" : "text-gray-600",
       )}
     >
       {title}
       {description && (
         <span
           className={cn(
-            "mt-3 block text-lg font-normal tracking-tight text-gray-400 2xl:text-3xl",
-            isInView ? "text-gray-400" : "text-white",
+            "mt-3 block text-lg font-normal tracking-tight 2xl:text-3xl",
+            isInView ? "text-white" : "text-gray-400",
           )}
         >
           {description}

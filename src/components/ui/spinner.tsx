@@ -1,7 +1,7 @@
 import { Loader2 } from "lucide-react";
 
-export function Spinner() {
-  return <Loader2 className="mr-2 h-5 w-5 animate-spin" />;
+export function Spinner({ className }: { className?: string }) {
+  return <Loader2 className={`mr-2 h-5 w-5 animate-spin ${className || ''}`} />;
 }
 
 export function SpinnerPage() {
