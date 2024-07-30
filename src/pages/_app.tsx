@@ -9,6 +9,7 @@ import { DefaultSeo } from "next-seo";
 import { type AppType } from "next/app";
 import { useRouter } from "next/router";
 import { SEO } from "../../next-seo.config";
+import Script from 'next/script';
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -16,9 +17,14 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   const router = useRouter();
   const isReader = router.pathname.startsWith("/f/");
+
   return (
     <SessionProvider session={session}>
       <DefaultSeo {...SEO} />
+      <Script
+        src="https://sdk.cashfree.com/js/v3/cashfree.js"
+        strategy="lazyOnload"
+      />
       {isReader ? (
         <Component {...pageProps} />
       ) : (

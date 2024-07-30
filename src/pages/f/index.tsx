@@ -4,6 +4,7 @@ import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-di
 import { Input } from "@/components/ui/input";
 import { SpinnerPage } from "@/components/ui/spinner";
 import { useToast } from "@/components/ui/use-toast";
+import ProUploadFileModal from "@/components/workspace/pro-upload-file-modal";
 import UploadFileModal from "@/components/workspace/upload-file-modal";
 import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
@@ -29,7 +30,8 @@ const UserLibraryPage = () => {
 
   if (isError) return <div className="text-red-500">Something went wrong</div>;
   if (isLoading) return <SpinnerPage />;
-  if (!userDocs) return <div className="text-gray-500">Sorry no result found</div>;
+  if (!userDocs)
+    return <div className="text-gray-500">Sorry no result found</div>;
 
   const combinedUserDocs = [
     ...userDocs?.documents,
@@ -74,7 +76,7 @@ const UserLibraryPage = () => {
           href="/"
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            "mb-6 w-fit justify-start p-2 text-green-400 hover:text-black"
+            "mb-6 w-fit justify-start p-2 text-green-400 hover:text-black",
           )}
         >
           <ChevronLeftIcon className="mr-2 h-4 w-4" />
@@ -92,10 +94,14 @@ const UserLibraryPage = () => {
             </p>
           </div>
           <div className="mt-4 sm:mt-0">
-            <UploadFileModal
-              docsCount={userDocs.documents.length}
-              refetchUserDocs={refetchUserDocs}
-            />
+            {userDocs.plan === "PRO" ? (
+              <ProUploadFileModal refetchUserDocs={refetchUserDocs} />
+            ) : (
+              <UploadFileModal
+                docsCount={userDocs.documents.length}
+                refetchUserDocs={refetchUserDocs}
+              />
+            )}
           </div>
         </div>
 
@@ -119,7 +125,7 @@ const UserLibraryPage = () => {
                   id={doc.id}
                   title={doc.title}
                   isCollab={userDocs.collaboratorateddocuments.some(
-                    (collab) => collab.document.id === doc.id
+                    (collab) => collab.document.id === doc.id,
                   )}
                   onDelete={handleDeleteClick}
                 />
@@ -155,14 +161,16 @@ const DocCard = ({
         href={`/f/${id}`}
         className={cn(
           buttonVariants({ variant: "ghost" }),
-          "flex w-full flex-col gap-2 py-6 px-4 rounded-lg hover:bg-gray-700"
+          "flex w-full flex-col gap-2 py-6 px-4 rounded-lg hover:bg-gray-700",
         )}
       >
         <p className="text-sm sm:text-base break-words">
           {title?.slice(0, 30) + (title.length > 30 ? "..." : "") ?? "Untitled"}
         </p>
         {isCollab && (
-          <Badge className="w-fit bg-green-600 text-white text-xs">Collab</Badge>
+          <Badge className="w-fit bg-green-600 text-white text-xs">
+            Collab
+          </Badge>
         )}
       </Link>
       <Button
@@ -179,4 +187,5 @@ const DocCard = ({
     </div>
   );
 };
+
 export default UserLibraryPage;

@@ -6,7 +6,7 @@ const f = createUploadthing();
 
 export const docUploader = {
   // TODO allow for diff file size based on plan
-  docUploader: f({ pdf: { maxFileSize: "8MB", maxFileCount: 1 } })
+  docUploader: f({ pdf: { maxFileSize: "64MB", maxFileCount: 1 } })
     .middleware(async ({ req, res, files, input }) => {
       const session = await getServerAuthSession({ req, res });
       if (!session?.user) throw new Error("Unauthorized");

@@ -20,6 +20,7 @@ import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 import { z } from "zod";
+import UpgradeButton from "../other/upgrade-button";
 
 const UploadFileModal = ({
   refetchUserDocs,
@@ -28,11 +29,11 @@ const UploadFileModal = ({
   refetchUserDocs: () => void;
   docsCount: number;
 }) => {
-  const session = useSession();
+  const { data: session } = useSession();
+  const userPlan = session?.user?.plan || "FREE";
 
   const [url, setUrl] = useState("");
   const [file, setFile] = useState<File>();
-
   const [open, setOpen] = useState(false);
   const closeModal = () => setOpen(false);
 
@@ -60,80 +61,76 @@ const UploadFileModal = ({
   });
 
   const uploadFile = async () => {
-    if ((file && url) || (!file && !url)) {
-      toast.error("Please upload a file or enter a URL.", {
-        duration: 3000,
-      });
-      return;
-    }
-    try {
-      if (file) {
-        await startUpload([file]);
-      } else if (url) {
-        const urlSchema = z.string().url();
-        try {
-          urlSchema.parse(url);
-        } catch (err) {
-          toast.error("Invalid URL", {
-            duration: 3000,
-          });
-          return;
-        }
-
-        const res = await fetch(url);
-        const contentType = res.headers.get("Content-Type");
-        if (contentType !== "application/pdf") {
-          toast.error("URL is not a PDF", {
-            duration: 3000,
-          });
-          return;
-        }
-
-        const fileName =
-          res.headers.get("Content-Disposition")?.split("filename=")[1] ||
-          url.split("/").pop();
-
-        await mutateAddDocumentByLink({
-          title: fileName ?? "Untitled",
-          url,
-        });
-
-        toast.success("File uploaded successfully.", {
+    const uploadFile = async () => {
+      if ((file && url) || (!file && !url)) {
+        toast.error("Please upload a file or enter a URL.", {
           duration: 3000,
         });
+        return;
       }
-      closeModal();
-      setFile(undefined);
-      setUrl("");
-      refetchUserDocs();
-    } catch (err: any) {
-      console.log("error", err.message);
+      try {
+        if (file) {
+          await startUpload([file]);
+        } else if (url) {
+          const urlSchema = z.string().url();
+          try {
+            urlSchema.parse(url);
+          } catch (err) {
+            toast.error("Invalid URL", {
+              duration: 3000,
+            });
+            return;
+          }
 
-      toast.error(
-        "Error occurred while uploading. Please make sure the PDF is accessible.",
-        {
-          duration: 3000,
-        },
-      );
-    }
+          const res = await fetch(url);
+          const contentType = res.headers.get("Content-Type");
+          if (contentType !== "application/pdf") {
+            toast.error("URL is not a PDF", {
+              duration: 3000,
+            });
+            return;
+          }
+
+          const fileName =
+            res.headers.get("Content-Disposition")?.split("filename=")[1] ||
+            url.split("/").pop();
+
+          await mutateAddDocumentByLink({
+            title: fileName ?? "Untitled",
+            url,
+          });
+
+          toast.success("File uploaded successfully.", {
+            duration: 3000,
+          });
+        }
+        closeModal();
+        setFile(undefined);
+        setUrl("");
+        refetchUserDocs();
+      } catch (err: any) {
+        console.log("error", err.message);
+
+        toast.error(
+          "Error occurred while uploading. Please make sure the PDF is accessible.",
+          {
+            duration: 3000,
+          },
+        );
+      }
+    };
   };
+
+  const isLimitReached = docsCount >= PLANS[userPlan].maxDocs;
 
   return (
     <Dialog open={open} onOpenChange={(o) => setOpen(o)}>
       <DialogTrigger>
         <div
           onClick={(e) => {
-            const userPlan = session?.data?.user?.plan;
-            if (!userPlan) return;
-            const allowedDocsCount = PLANS[userPlan].maxDocs;
-
-            if (docsCount >= allowedDocsCount) {
+            if (isLimitReached) {
               e.preventDefault();
-              toast.error("Free upload limit exceeded.", {
-                duration: 3000,
-                description: `Upgrade your plan to upload more than ${allowedDocsCount} document.`,
-              });
-              return;
+              setOpen(true);
             }
           }}
           className={cn(buttonVariants())}
@@ -144,71 +141,92 @@ const UploadFileModal = ({
       <DialogContent hideClose={true}>
         <DialogHeader>
           <DialogTitle>
-            <p className="text-xl">Upload File</p>
-            <p className="text-sm font-normal text-gray-500">
-              Choose files under 6 pages to use AI, flashcard. (For now)
-            </p>
+            {isLimitReached ? (
+              <p className="text-xl">Upgrade to Pro</p>
+            ) : (
+              <p className="text-xl">Upload File</p>
+            )}
           </DialogTitle>
 
-          <div className="mb-2" />
-
-          <Uploader
-            permittedFileInfo={permittedFileInfo}
-            setUrl={setUrl}
-            setFile={setFile}
-            file={file}
-          />
-
-          <div className="relative flex items-center py-5">
-            <div className="flex-grow border-t border-gray-100"></div>
-            <span className="mx-3 flex-shrink text-xs text-gray-500">OR</span>
-            <div className="flex-grow border-t border-gray-100"></div>
-          </div>
-
-          <div>
-            <p>Import from URL</p>
-            <p className="mb-2 text-xs font-normal text-gray-500">
-              Your files are not stored, only the URL is retained, also Supports
-              Google Drive and Dropbox links.
-            </p>
-
-            <Input
-              value={url}
-              onChange={onUrlChange}
-              placeholder="https://example.com/file.pdf"
-              className="w-full"
-            />
-          </div>
-
-          <div>
-            <div className="my-3 flex items-center space-x-2">
-              <Checkbox id="terms2" disabled />
-              <label
-                htmlFor="terms2"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                OCR for scanned documents. (Coming soon)
-              </label>
+          {isLimitReached ? (
+            <div>
+              <p className="mb-4 text-sm text-gray-500">
+                You've reached the maximum number of documents for your current
+                plan. Upgrade to Pro to upload more documents and access
+                additional features.
+              </p>
+              <UpgradeButton plan={""} price={0} />
             </div>
-          </div>
+          ) : (
+            <>
+              <p className="text-sm font-normal text-gray-500">
+                Choose files under 6 pages to use AI, flashcard. (For now)
+              </p>
 
-          <div>
-            <Button
-              disabled={
-                (!file && !url) || isUploadthingUploading || isUrlUploading
-              }
-              className="mt-4 w-full"
-              onClick={uploadFile}
-            >
-              {(isUploadthingUploading || isUrlUploading) && <Spinner />}
-              Upload
-            </Button>
-          </div>
+              <div className="mb-2" />
+
+              <Uploader
+                permittedFileInfo={permittedFileInfo}
+                setUrl={setUrl}
+                setFile={setFile}
+                file={file}
+              />
+
+              <div className="relative flex items-center py-5">
+                <div className="flex-grow border-t border-gray-100"></div>
+                <span className="mx-3 flex-shrink text-xs text-gray-500">
+                  OR
+                </span>
+                <div className="flex-grow border-t border-gray-100"></div>
+              </div>
+
+              <div>
+                <p>Import from URL</p>
+                <p className="mb-2 text-xs font-normal text-gray-500">
+                  Your files are not stored, only the URL is retained, also
+                  Supports Google Drive and Dropbox links.
+                </p>
+
+                <Input
+                  value={url}
+                  onChange={onUrlChange}
+                  placeholder="https://example.com/file.pdf"
+                  className="w-full"
+                />
+              </div>
+
+              <div>
+                <div className="my-3 flex items-center space-x-2">
+                  <Checkbox id="terms2" disabled />
+                  <label
+                    htmlFor="terms2"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    OCR for scanned documents. (Coming soon)
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <Button
+                  disabled={
+                    (!file && !url) || isUploadthingUploading || isUrlUploading
+                  }
+                  className="mt-4 w-full"
+                  onClick={uploadFile}
+                >
+                  {(isUploadthingUploading || isUrlUploading) && <Spinner />}
+                  Upload
+                </Button>
+              </div>
+            </>
+          )}
         </DialogHeader>
       </DialogContent>
     </Dialog>
   );
 };
+
 export default UploadFileModal;
 
 const Uploader = ({
@@ -222,18 +240,21 @@ const Uploader = ({
   file?: File;
   permittedFileInfo: any;
 }) => {
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (!acceptedFiles || acceptedFiles.length !== 1 || !acceptedFiles[0]) {
-      toast.error("Please upload a single file.", {
-        duration: 3000,
-      });
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (!acceptedFiles || acceptedFiles.length !== 1 || !acceptedFiles[0]) {
+        toast.error("Please upload a single file.", {
+          duration: 3000,
+        });
 
-      return;
-    }
+        return;
+      }
 
-    setUrl("");
-    setFile(acceptedFiles[0]);
-  }, [setUrl, setFile]);
+      setUrl("");
+      setFile(acceptedFiles[0]);
+    },
+    [setUrl, setFile],
+  );
 
   const fileTypes = permittedFileInfo?.config
     ? Object.keys(permittedFileInfo?.config)
@@ -266,7 +287,7 @@ const Uploader = ({
       ) : (
         <>
           <p>Upload the pdf</p>
-          <p className="text-sm text-gray-500">Single PDF upto 8MB</p>
+          <p className="text-sm text-gray-500">Single PDF upto 6MB</p>
         </>
       )}
     </div>

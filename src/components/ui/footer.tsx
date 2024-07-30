@@ -39,7 +39,7 @@ const Footer = () => {
             <ul className="text-sm space-y-2">
               <li>
                 <a href="#" className="hover:text-gray-300 transition-colors">
-                  Twitter
+                  Pricing
                 </a>
               </li>
               <li>

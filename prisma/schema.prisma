@@ -39,6 +39,7 @@ model User {
   feedbacks                 Feedback[]
   flashcardAttempts         FlashcardAttempt[]
   plan                      Plan               @default(FREE)
+  phone                     String?
 }
 
 enum Plan {
