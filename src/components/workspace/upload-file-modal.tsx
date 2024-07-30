@@ -151,10 +151,11 @@ const UploadFileModal = ({
           {isLimitReached ? (
             <div>
               <p className="mb-4 text-sm text-gray-500">
-                You've reached the maximum number of documents for your current
-                plan. Upgrade to Pro to upload more documents and access
+                You&apos;ve reached the maximum number of documents for your
+                current plan. Upgrade to Pro to upload more documents and access
                 additional features.
               </p>
+
               <UpgradeButton plan={""} price={0} />
             </div>
           ) : (
