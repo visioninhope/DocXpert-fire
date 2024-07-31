@@ -61,64 +61,62 @@ const UploadFileModal = ({
   });
 
   const uploadFile = async () => {
-    const uploadFile = async () => {
-      if ((file && url) || (!file && !url)) {
-        toast.error("Please upload a file or enter a URL.", {
+    if ((file && url) || (!file && !url)) {
+      toast.error("Please upload a file or enter a URL.", {
+        duration: 3000,
+      });
+      return;
+    }
+    try {
+      if (file) {
+        await startUpload([file]);
+      } else if (url) {
+        const urlSchema = z.string().url();
+        try {
+          urlSchema.parse(url);
+        } catch (err) {
+          toast.error("Invalid URL", {
+            duration: 3000,
+          });
+          return;
+        }
+
+        const res = await fetch(url);
+        const contentType = res.headers.get("Content-Type");
+        if (contentType !== "application/pdf") {
+          toast.error("URL is not a PDF", {
+            duration: 3000,
+          });
+          return;
+        }
+
+        const fileName =
+          res.headers.get("Content-Disposition")?.split("filename=")[1] ||
+          url.split("/").pop();
+
+        await mutateAddDocumentByLink({
+          title: fileName ?? "Untitled",
+          url,
+        });
+
+        toast.success("File uploaded successfully.", {
           duration: 3000,
         });
-        return;
       }
-      try {
-        if (file) {
-          await startUpload([file]);
-        } else if (url) {
-          const urlSchema = z.string().url();
-          try {
-            urlSchema.parse(url);
-          } catch (err) {
-            toast.error("Invalid URL", {
-              duration: 3000,
-            });
-            return;
-          }
+      closeModal();
+      setFile(undefined);
+      setUrl("");
+      refetchUserDocs();
+    } catch (err: any) {
+      console.log("error", err.message);
 
-          const res = await fetch(url);
-          const contentType = res.headers.get("Content-Type");
-          if (contentType !== "application/pdf") {
-            toast.error("URL is not a PDF", {
-              duration: 3000,
-            });
-            return;
-          }
-
-          const fileName =
-            res.headers.get("Content-Disposition")?.split("filename=")[1] ||
-            url.split("/").pop();
-
-          await mutateAddDocumentByLink({
-            title: fileName ?? "Untitled",
-            url,
-          });
-
-          toast.success("File uploaded successfully.", {
-            duration: 3000,
-          });
-        }
-        closeModal();
-        setFile(undefined);
-        setUrl("");
-        refetchUserDocs();
-      } catch (err: any) {
-        console.log("error", err.message);
-
-        toast.error(
-          "Error occurred while uploading. Please make sure the PDF is accessible.",
-          {
-            duration: 3000,
-          },
-        );
-      }
-    };
+      toast.error(
+        "Error occurred while uploading. Please make sure the PDF is accessible.",
+        {
+          duration: 3000,
+        },
+      );
+    }
   };
 
   const isLimitReached = docsCount >= PLANS[userPlan].maxDocs;
