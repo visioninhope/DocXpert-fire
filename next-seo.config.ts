@@ -4,7 +4,7 @@ export const SEO = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://docxpert.vercel.app/",
+    url: "DocXpert",
     // // url: "https://docxpert.vercel.app/",
     siteName: "docxpert",
     images: [
@@ -34,7 +34,7 @@ export const SEO = {
   additionalLinkTags: [
     {
       rel: "icon",
-      href: "/logo.png",
+      href: "https://docxpert.vercel.app/favicon.ico",
     },
   ],
 };
