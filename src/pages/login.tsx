@@ -27,7 +27,7 @@ const Login = () => {
           <div className="space-y-4">
             <FileText className="mx-auto h-12 w-12 text-green-500" />
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
-              Welcome to DocXpert
+              Welcome to ChatPulse
             </h1>
             <p className="text-sm sm:text-base text-gray-400">Sign in to access your account</p>
           </div>

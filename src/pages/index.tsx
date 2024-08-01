@@ -23,7 +23,7 @@ export default function Home() {
       <MaxWidthWrapper className="mt-28 sm:mt-28 flex flex-col items-center justify-center text-center">
         <div className="mx-auto mb-4 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full border border-green-500/20 bg-gradient-to-r from-blue-500/30 to-green-500/30 px-7 py-2 shadow-md backdrop-blur-sm transition-all hover:border-green-500/40 hover:bg-gradient-to-r from-blue-500/40 to-green-500/40">
           <p className="text-sm font-semibold text-white">
-            DocXpert is now Live!
+            ChatPulse is now Live!
           </p>
         </div>
         <h1 className="max-w-4xl text-5xl font-bold md:text-6xl lg:text-7xl text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-green-600">
@@ -31,7 +31,7 @@ export default function Home() {
           seconds.
         </h1>
         <p className="mt-5 max-w-prose text-white sm:text-lg">
-          DocXpert allows you to have conversations with any PDF document.
+          ChatPulse allows you to have conversations with any PDF document.
           Simply upload your file and start asking questions right away !
         </p>
         <Link
@@ -56,7 +56,7 @@ export default function Home() {
             </h2>
             <p className="mt-8 text-lg text-white">
               Chatting to your PDF files has never been easier than with
-              DocXpert.
+              ChatPulse.
             </p>
           </div>
         </div>
@@ -100,7 +100,7 @@ export default function Home() {
                 Start asking questions
               </span>
               <span className="mt-2 text-white">
-                It's that simple. Try out DocXpert today - It takes less than a minute.
+                It's that simple. Try out ChatPulse today - It takes less than a minute.
               </span>
             </div>
             <span className="absolute bottom-0 left-0 w-0 h-1 bg-green-500 transition-all duration-300 ease-out group-hover:w-full"></span>

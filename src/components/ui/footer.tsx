@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2">
           <div>
-            <h3 className="text-xl font-bold mb-4 hover:text-green-500 hover:underline transition-colors duration-300 ">DocXpert</h3>
+            <h3 className="text-xl font-bold mb-4 hover:text-green-500 hover:underline transition-colors duration-300 ">ChatPulse</h3>
             <p className="text-sm hover:text-green-500  ">Your AI-powered document assistant</p>
           </div>
           <div>
@@ -81,7 +81,7 @@ const Footer = () => {
         </div>
         <div className="border-t border-gray-700 mt-8 pt-8 text-sm text-center">
           <p className="hover:text-green-500 transition-colors">
-            © {new Date().getFullYear()} DocXpert. All rights reserved.
+            © {new Date().getFullYear()} ChatPulse. All rights reserved.
           </p>
         </div>
       </div>

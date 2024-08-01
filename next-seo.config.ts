@@ -1,16 +1,16 @@
 export const SEO = {
-  title: "DocXpert",
+  title: "ChatPulse",
   description: "Revolutionise your Learning Experience.",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "DocXpert",
-    // // url: "https://docxpert.vercel.app/",
-    siteName: "docxpert",
+    url: "ChatPulse",
+    // // url: "https://ChatPulse.vercel.app/",
+    siteName: "chatpulse",
     images: [
       { url: "/logo.png" },
       {
-        url: "https://docxpert.vercel.app/og.png",
+        url: "https://chatpulseai.vercel.app/og.png",
         width: 800,
         height: 600,
         alt: "Og Image",
@@ -27,14 +27,14 @@ export const SEO = {
     },
     {
       name: "application-name",
-      content: "DocXpert",
+      content: "ChatPulse",
     },
   ],
 
   additionalLinkTags: [
     {
       rel: "icon",
-      href: "https://docxpert.vercel.app/favicon.ico",
+      href: "https://chatpulseai.vercel.app/favicon.ico",
     },
   ],
 };
