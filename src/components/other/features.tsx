@@ -3,10 +3,11 @@ import { cn } from "@/lib/utils";
 import { useInView } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
+// import newgif from "/features/new.gif";
 
 const features = [
   {
-    title: "Annotate your documents w. ease",
+    title: "Annotate your documents with ease",
     imageUrl: "/features/annotation.gif",
     description: "To create area highlight hold ⌥ Option key (Alt), then click and drag.",
   },
@@ -33,11 +34,11 @@ const features = [
 
 function Features() {
   return (
-    <div className="bg-gradient-to-b from-black to-gray-900">
-      <div className="mx-auto max-w-6xl px-4 md:block 2xl:max-w-[80%]">
+    <div className="bg-gradient-to-b from-black to-grey-900 -translate-y-42">
+      <div className="mx-auto max-w-6xl px-4 md:block 2xl:max-w-[80%] ">
         <div>
           <div className="flex w-full items-start gap-20">
-            <div className="w-full md:py-[50vh]">
+            <div className="w-full md:py-[2vh]">
               <ul>
                 {features.map((feature, index) => (
                   <li key={index}>
@@ -70,9 +71,9 @@ const FeatureImage = () => {
     typeof features[inViewFeature]?.imageUrl !== "string";
 
   return (
-    <div className="relative aspect-video h-[25%] w-full rounded-2xl bg-gray-900 lg:h-[40%] [&:has(>_.active-card)]:bg-transparent">
-      {!invalidFeature && inViewFeature !== null && features[inViewFeature] && (
-        <Image
+    <div className="relative aspect-video h-[40%] w-full rounded-2xl lg:h-[40%] [&:has(>_.active-card)]:bg-transparent">
+    {!invalidFeature && inViewFeature !== null && features[inViewFeature] && (
+      <Image
           alt="feature"
           src={features[inViewFeature].imageUrl}
           width={800}
@@ -80,8 +81,10 @@ const FeatureImage = () => {
           className="h-full w-full rounded-md"
           unoptimized={true}
         />
-      )}
-    </div>
+    
+    )}
+  </div>
+  
   );
 };
 
@@ -93,7 +96,7 @@ type FeatureDataProps = {
   description?: string;
 };
 
-export const FeatureData = ({ id, title, description }: FeatureDataProps) => {
+export const FeatureData = ({id, title, description }: FeatureDataProps) => {
   const ref = useRef<HTMLParagraphElement>(null);
   const documentRef = useRef(null);
   const isInView = useInView(ref, {

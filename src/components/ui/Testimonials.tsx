@@ -1,5 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
+// import { Tilt } from 'react-tilt'
+
 
 const testimonials = [
   {
@@ -15,7 +17,7 @@ const testimonials = [
   {
     name: 'Ethan Brooks',
     text: 'I deal with extensive documents daily as a researcher. ChatWithPDF allows me to extract key information and insights better. It&apos;s an invaluable tool for my research.',
-    image: '/boy-1.png',
+    image: '/girl-2.png',
   },
 ];
 
@@ -30,22 +32,22 @@ const Testimonials: React.FC = () => {
           Don&apos;t just take our word for it. Here&apos;s what some of our users have to say about their experience with ChatWithPDF
         </p>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-          {testimonials.map((testimonial, index) => (
-            <div key={index} className="bg-gray-800 rounded-lg p-6">
-              <p className="text-gray-300 mb-4">{testimonial.text}</p>
-              <div className="flex items-center">
-                <Image
-                  src={testimonial.image}
-                  alt={testimonial.name}
-                  width={48}
-                  height={48}
-                  className="rounded-full mr-4"
-                />
-                <span className="text-white font-medium">{testimonial.name}</span>
-              </div>
-            </div>
-          ))}
-        </div>
+  {testimonials.map((testimonial, index) => (
+    <div key={index} className="bg-gray-800 rounded-lg p-6 h-full border-2 border-green-500">
+      <p className="text-gray-300 mb-4">{testimonial.text}</p>
+      <div className="flex items-center">
+        <Image
+          src={testimonial.image}
+          alt={testimonial.name}
+          width={48}
+          height={48}
+          className="rounded-full mr-4"
+        />
+        <span className="text-white font-medium">{testimonial.name}</span>
+      </div>
+    </div>
+  ))}
+</div>
       </div>
     </div>
   );

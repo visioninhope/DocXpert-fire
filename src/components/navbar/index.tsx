@@ -12,10 +12,20 @@ const Navbar = () => {
       <div className="mx-auto flex max-w-5xl flex-col px-4 py-4 lg:px-16 2xl:max-w-7xl">
         <div className="flex items-center justify-between">
           <Link href="/">
-            <div className="flex items-center gap-2">
-              <Image alt="docxpert" src="/logo.png" width={100} height={100} />
-              <span className="font-bold text-white text-2xl ">DocXpert</span>
-            </div>
+          <div className="flex items-center gap-0"> {/* Changed to gap-0 for minimum spacing */}
+  <Image 
+    alt="chatpulse" 
+    src="/logo.png" 
+    width={100}  // Increased from 100 to 110
+    height={100} // Increased from 100 to 110
+    style={{ marginTop: '10px', marginRight: '-10px',marginBottom:'10px',}}  // Added negative right margin
+  />
+
+  <span className="font-bold text-2xl">
+    <span className="text-white">Chat</span>
+    <span className="text-transparent bg-clip-text bg-[url('/text-bg.jpeg')] bg-cover">Pulse</span>
+  </span>
+</div>
           </Link>
           {session ? (
             <UserAccountNav user={session.user} />
