@@ -48,6 +48,7 @@
     "@trpc/server": "^10.34.0",
     "@uploadthing/react": "^6.2.4",
     "ai": "^2.2.35",
+    "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
     "cashfree-pg": "^4.2.3",
     "cashfree-sdk": "^0.1.1",
