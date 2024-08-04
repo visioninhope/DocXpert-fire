@@ -37,7 +37,7 @@ const UpgradeButton: FC<UpgradeButtonProps> = ({ plan, price }) => {
     const initializeCashfree = async () => {
       try {
         const cashfreeInstance = await load({
-          mode: "sandbox",
+          mode: "production",
         });
         setCashfree(cashfreeInstance);
       } catch (error) {
