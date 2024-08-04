@@ -28,10 +28,10 @@ export default async function handler(
         "order_currency": "INR",
         "order_id": orderId,
         "customer_details": {
-          "customer_id": "webcodder01",
-          "customer_phone": "9999999999",
-          "customer_name": "Web Codder",
-          "customer_email": "webcodder@example.com"
+          "customer_id": "",
+          "customer_phone": "",
+          "customer_name": "",
+          "customer_email": ""
         },
       };
 
