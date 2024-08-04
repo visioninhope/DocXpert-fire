@@ -36,7 +36,7 @@ export default async function handler(
     console.log('Processing order ID:', orderId);
 
     const response = await axios.get<OrderResponse>(
-      `https://sandbox.cashfree.com/pg/orders/${orderId}`,
+      `https://api.cashfree.com/pg/orders/${orderId}`,
       {
         headers: {
           'x-api-version': '2023-08-01',
