@@ -5,17 +5,17 @@ import { api } from "@/lib/api";
 import { useChatStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { useChat } from "ai/react";
-import { BanIcon, Send } from "lucide-react";
+import { BanIcon, Send, ToggleLeft, ToggleRight } from "lucide-react";
 import { useRouter } from "next/router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import TextareaAutosize from "react-textarea-autosize";
 import { toast } from "sonner";
 
 export default function Chat({ isVectorised }: { isVectorised: boolean }) {
   const { query } = useRouter();
-
   const docId = query?.docId;
+  const [isRAGMode, setIsRAGMode] = useState(true);
 
   const {
     messages,
@@ -26,11 +26,12 @@ export default function Chat({ isVectorised }: { isVectorised: boolean }) {
     stop,
     error,
     append,
+    reload,
   } = useChat({
     body: {
       docId: docId as string,
+      isRAGMode,
     },
-
     onError: (err: any) => {
       toast.error(err?.message, {
         duration: 3000,
@@ -52,7 +53,10 @@ export default function Chat({ isVectorised }: { isVectorised: boolean }) {
     setSendMessage(sendMessage);
   }, []);
 
-  //implement autoscrolling, and infinite loading => also fetch the messages from prev session and display
+  useEffect(() => {
+    reload();
+  }, [isRAGMode]);
+
   const { data: prevChatMessages, isLoading: isChatsLoading } =
     api.message.getAllByDocId.useQuery(
       {
@@ -124,6 +128,24 @@ export default function Chat({ isVectorised }: { isVectorised: boolean }) {
 
   return (
     <div className="flex h-full w-full flex-col gap-2 overflow-hidden">
+      <div className="flex justify-end mb-2">
+        <button
+          onClick={() => setIsRAGMode(!isRAGMode)}
+          className="flex items-center text-sm font-medium text-gray-600 hover:text-gray-800"
+        >
+          {isRAGMode ? (
+            <>
+              <ToggleRight className="w-5 h-5 mr-1" />
+              PDF Mode On
+            </>
+          ) : (
+            <>
+              <ToggleLeft className="w-5 h-5 mr-1" />
+              General Mode On
+            </>
+          )}
+        </button>
+      </div>
       <div
         className="hideScrollbar flex flex-1 flex-col gap-3 overflow-auto"
         ref={messageWindowRef}
@@ -131,13 +153,12 @@ export default function Chat({ isVectorised }: { isVectorised: boolean }) {
         {[
           {
             id: "id",
-            content:
-              "Welcome to **ChatPulse**! I'm here to assist you. Feel free to ask questions or discuss topics based on the data provided. Whether it's clarifying information, diving deeper into a subject, or exploring related topics, I'm ready to help. Let's make the most out of your learning!",
-
+            content: isRAGMode
+              ? "Welcome to PDF Mode! I'm here to assist you with information specifically from your uploaded PDF. Ask me anything about its content!"
+              : "Welcome to General Mode! I'm here to assist you with a wide range of topics. Feel free to ask any question!",
             role: "assistant",
           },
           ...(prevChatMessages ?? []),
-
           ...messages,
         ].map((m) => (
           <div
@@ -177,7 +198,7 @@ export default function Chat({ isVectorised }: { isVectorised: boolean }) {
         <div className="mb-2 mt-1 flex w-full ">
           <TextareaAutosize
             maxLength={1000}
-            placeholder="Enter your question (max 1,000 characters)"
+            placeholder={isRAGMode ? "Ask about your PDF (max 1,000 characters)" : "Ask anything (max 1,000 characters)"}
             className="flex-1 resize-none rounded-lg border border-gray-300 px-3 py-2 font-normal"
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey && !isLoading) {
@@ -205,11 +226,17 @@ export default function Chat({ isVectorised }: { isVectorised: boolean }) {
               <Send
                 size={24}
                 className=" text-gray-600 group-hover:text-gray-700"
-              />
-            </button>
-          )}
-        </div>
-      </form>
-    </div>
-  );
-}
+                />
+              </button>
+            )}
+          </div>
+        </form>
+        {isRAGMode && (
+          <div className="text-xs text-gray-500 mt-2">
+            PDF Mode: Responses are based solely on the content of your uploaded PDF.
+          </div>
+        )}
+      </div>
+    );
+  }
+  

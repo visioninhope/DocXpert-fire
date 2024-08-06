@@ -30,9 +30,8 @@ function formatMessages(messages: any[], systemContent: string): ChatCompletionM
   return formattedMessages;
 }
 
-
 export async function POST(req: Request, res: Response) {
-  const { messages, docId } = await req.json();
+  const { messages, docId, isRAGMode } = await req.json();
 
   if (typeof docId !== "string")
     return new Response("Not found", { status: 404 });
@@ -56,49 +55,53 @@ export async function POST(req: Request, res: Response) {
     },
   });
 
-  if (!doc?.isVectorised) {
-    throw new Error("Document not vectorised.");
-  }
-
   if (!doc) return new Response("Not found", { status: 404 });
 
-  const embeddings = new HuggingFaceInferenceEmbeddings({
-    apiKey: env.HUGGINGFACE_API_KEY,
-  });
+  let systemContent = '';
+  let vectorStore;
 
-  const pinecone = getPineconeClient();
-  const pineconeIndex = (await pinecone).Index("docxpert");
+  if (isRAGMode) {
+    if (!doc?.isVectorised) {
+      throw new Error("Document not vectorised.");
+    }
 
-  const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
-    pineconeIndex,
-    filter: {
-      fileId: docId as string,
-    },
-  });
+    const embeddings = new HuggingFaceInferenceEmbeddings({
+      apiKey: env.HUGGINGFACE_API_KEY,
+    });
 
-  const lastMessage = messages.at(-1).content;
+    const pinecone = getPineconeClient();
+    const pineconeIndex = (await pinecone).Index("docxpert");
 
-  const results = await vectorStore.similaritySearch(lastMessage, 4);
+    vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
+      pineconeIndex,
+      filter: {
+        fileId: docId as string,
+      },
+    });
 
-  const systemContent = `AI assistant is a brand new, powerful, human-like artificial intelligence.
-  The traits of AI include expert knowledge, helpfulness, cleverness, and articulateness.
-  AI is a well-behaved and well-mannered individual.
-  AI is always friendly, kind, and inspiring, and he is eager to provide vivid and thoughtful responses to the user.
-  AI has the sum of all knowledge in their brain, and is able to accurately answer nearly any question about any topic in conversation.
-  START CONTEXT BLOCK
-  ${results.map((r) => r.pageContent).join("\n\n")}
-  END OF CONTEXT BLOCK
-  AI assistant will take into account any CONTEXT BLOCK that is provided in a conversation.
-  If the context does not provide the answer to question, the AI assistant will say, "I'm sorry, but I don't know the answer to that question".
-  AI assistant will not apologize for previous responses, but instead will indicated new information was gained.
-  AI assistant will not invent anything that is not drawn directly from the context.
-  AI assistant will answer the questions in Markdown format with clear headings and lists.`;
+    const lastMessage = messages.at(-1).content;
+    const results = await vectorStore.similaritySearch(lastMessage, 6);
+
+    systemContent = `You are an AI assistant specifically trained on the content of a provided document.
+    Your knowledge is strictly limited to the information contained in this document.
+    You must only answer questions based on the following context from the document:
+    START CONTEXT BLOCK
+    ${results.map((r) => r.pageContent).join("\n\n")}
+    END OF CONTEXT BLOCK
+    If the context does not provide a clear answer to the question, state that you don't have enough information from the document to answer accurately.
+    Do not use any external knowledge or make assumptions beyond what is explicitly stated in the context.
+    Always provide answers in Markdown format with clear headings and lists where appropriate.`;
+  } else {
+    systemContent = `You are a general knowledge AI assistant.
+    You have broad knowledge on various topics and can engage in general conversation.
+    Always provide answers in Markdown format with clear headings and lists where appropriate.`;
+  }
 
   const formattedMessages = formatMessages(messages, systemContent);
 
   const response = await fireworks.chat.completions.create({
     model: "accounts/fireworks/models/mixtral-8x7b-instruct",
-    temperature: 0,
+    temperature: isRAGMode ? 0 : 0.7,
     stream: true,
     max_tokens: 4096,
     messages: formattedMessages,

@@ -26,20 +26,24 @@ export async function POST(req: Request) {
       },
     );
   } else {
-    const { prompt } = await req.json();
+    const { prompt, isRAGMode } = await req.json();
+
+    const systemMessage = isRAGMode
+      ? "You are an AI writing assistant that continues existing text based on context from prior text and specific document knowledge. " +
+        "Give more weight/priority to the later characters than the beginning ones. " +
+        "Limit your response to no more than 200 characters, but make sure to construct complete sentences." +
+        "Only return the text that you generate, not the prompt."
+      : "You are an AI writing assistant that continues existing text based on general knowledge. " +
+        "Give more weight/priority to the later characters than the beginning ones. " +
+        "Limit your response to no more than 200 characters, but make sure to construct complete sentences." +
+        "Only return the text that you generate, not the prompt.";
 
     const response = await fireworks.chat.completions.create({
-      model:
-        // "accounts/fireworks/models/llama-v2-70b-chat"
-        "accounts/fireworks/models/mixtral-8x7b-instruct",
+      model: "accounts/fireworks/models/mixtral-8x7b-instruct",
       messages: [
         {
           role: "system",
-          content:
-            "You are an AI writing assistant that continues existing text based on context from prior text. " +
-            "Give more weight/priority to the later characters than the beginning ones. " +
-            "Limit your response to no more than 200 characters, but make sure to construct complete sentences." +
-            "Only return the text that you generate, not the prompt, only reply with the ",
+          content: systemMessage,
         },
         {
           role: "user",
