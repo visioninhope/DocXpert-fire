@@ -20,7 +20,7 @@ export const vectoriseDocument = async (
 
   if (pageCount > maxPagesAllowed) {
     throw new Error(
-      `Document to be vectorised can have at max ${maxPagesAllowed} pages. Upgrade to use larger documents.`,
+      `Document to be vectorised ${pageCount} can have at max ${maxPagesAllowed} pages. Upgrade to use larger documents.`,
     );
   }
 
