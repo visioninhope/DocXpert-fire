@@ -1,4 +1,4 @@
-import fireworks from "@/lib/fireworks";
+import {fireworks} from "@/lib/fireworks";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 
