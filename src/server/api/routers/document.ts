@@ -4,6 +4,7 @@ import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { CollaboratorRole } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { deleteFileFromUploadThing } from "@/utils/uploadthing";
 
 export const documentRouter = createTRPCRouter({
   getDocData: protectedProcedure
@@ -382,23 +383,35 @@ export const documentRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const document = await ctx.prisma.document.findUnique({
         where: { id: input.documentId, ownerId: ctx.session.user.id },
+        select: { url: true, isUploaded: true },
       });
-  
+
       if (!document) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Document not found or you're not the owner.",
         });
       }
-  
-      // First, delete all related collaborator records
-      await ctx.prisma.collaborator.deleteMany({
-        where: { documentId: input.documentId },
-      });
-  
-      // Then, delete the document
-      await ctx.prisma.document.delete({ where: { id: input.documentId } });
-  
+
+      // Delete file from UploadThing if it was uploaded there
+      if (document.isUploaded) {
+        try {
+          await deleteFileFromUploadThing(document.url);
+        } catch (error) {
+          console.error("Error deleting file from UploadThing:", error);
+          // Continue with database deletion even if UploadThing deletion fails
+        }
+      }
+
+      // Delete related records and the document itself
+      await ctx.prisma.$transaction([
+        ctx.prisma.collaborator.deleteMany({ where: { documentId: input.documentId } }),
+        ctx.prisma.highlight.deleteMany({ where: { documentId: input.documentId } }),
+        ctx.prisma.message.deleteMany({ where: { documentId: input.documentId } }),
+        ctx.prisma.flashcard.deleteMany({ where: { documentId: input.documentId } }),
+        ctx.prisma.document.delete({ where: { id: input.documentId } }),
+      ]);
+
       return true;
     }),
   

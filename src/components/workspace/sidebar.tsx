@@ -1,6 +1,7 @@
 import Chat from "@/components/chat";
 import Editor from "@/components/editor";
 import Flashcards from "@/components/flashcard";
+import ArticleGenerator from "@/components/ArticleGenerator";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { SpinnerPage } from "@/components/ui/spinner";
@@ -11,7 +12,7 @@ import { cn } from "@/lib/utils";
 import { ClientSideSuspense } from "@liveblocks/react";
 import { saveAs } from "file-saver";
 import { RoomProvider } from "liveblocks.config";
-import { AlbumIcon, Download, Layers, MessagesSquareIcon } from "lucide-react";
+import { AlbumIcon, Download, Layers, MessagesSquareIcon, FileText } from "lucide-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import InviteCollab from "./invite-collab-modal";
@@ -34,6 +35,12 @@ const TABS = [
     tooltip: "Generate flashcards from the pdf",
     icon: <Layers size={20} />,
     isNew: false,
+  },
+  {
+    value: "articleGenerator",
+    tooltip: "Generate Articles",
+    icon: <FileText size={20} />,
+    isNew: true,
   },
 ];
 
@@ -69,7 +76,6 @@ const Sidebar = ({
   );
 
   useEffect(() => {
-    // update activeIndex when tab changes externally (using switchSidebarTabToChat fn)
     if (tab && tabNames.includes(tab)) {
       setActiveIndex(tab);
     }
@@ -134,13 +140,7 @@ const Sidebar = ({
             children: (
               <RoomProvider
                 id={`doc-${documentId}`}
-                initialPresence={
-                  {
-                    // TODO: figure out what this is
-                    // name: "User",
-                    // color: "red",
-                  }
-                }
+                initialPresence={{}}
               >
                 <ClientSideSuspense fallback={<SpinnerPage />}>
                   {() => (
@@ -155,13 +155,18 @@ const Sidebar = ({
           },
           {
             value: "chat",
-            tw: " p-2 pb-0 break-words border-stone-200 bg-white sm:rounded-lg sm:border sm:shadow-lg h-[calc(100vh-3.5rem)] w-full overflow-scroll ",
+            tw: "p-2 pb-0 break-words border-stone-200 bg-white sm:rounded-lg sm:border sm:shadow-lg h-[calc(100vh-3.5rem)] w-full overflow-scroll",
             children: <Chat isVectorised={isVectorised} />,
           },
           {
             value: "flashcards",
-            tw: " p-2 pb-0 break-words border-stone-200 bg-white sm:rounded-lg sm:border sm:shadow-lg h-[calc(100vh-3.5rem)] w-full overflow-scroll ",
+            tw: "p-2 pb-0 break-words border-stone-200 bg-white sm:rounded-lg sm:border sm:shadow-lg h-[calc(100vh-3.5rem)] w-full overflow-scroll",
             children: <Flashcards />,
+          },
+          {
+            value: "articleGenerator",
+            tw: "p-2 pb-0 break-words border-stone-200 bg-white sm:rounded-lg sm:border sm:shadow-lg h-[calc(100vh-3.5rem)] w-full overflow-scroll",
+            children: <ArticleGenerator />,
           },
         ].map((item) => (
           <TabsContent
@@ -178,4 +183,5 @@ const Sidebar = ({
     </div>
   );
 };
+
 export default Sidebar;

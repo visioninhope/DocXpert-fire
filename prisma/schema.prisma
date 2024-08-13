@@ -26,6 +26,7 @@ model Account {
 }
 
 model User {
+  articles Article[]
   id                        String             @id @default(cuid())
   name                      String
   email                     String?            @unique
@@ -61,6 +62,16 @@ model Document {
   createdAt     DateTime       @default(now())
   isUploaded    Boolean        @default(true)
   flashcards    Flashcard[]
+  vectorizationProgress Float @default(0)
+}
+
+model Article {
+  id        String   @id @default(cuid())
+  topic     String
+  content   String   @db.Text
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
 }
 
 enum CollaboratorRole {

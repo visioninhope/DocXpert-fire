@@ -67,7 +67,7 @@ const UserLibraryPage = () => {
       setDeleteDialogOpen(false);
       setDocumentToDelete(null);
     }
-  };
+  };  
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-[#0E1016] to-[#111827] text-white px-4 py-6 sm:px-6 lg:px-8">
