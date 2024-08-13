@@ -1,4 +1,4 @@
-import fireworks from "@/lib/fireworks";
+import {fireworks} from "@/lib/fireworks";
 import { authOptions } from "@/server/auth";
 import { prisma } from "@/server/db";
 import { OpenAIStream, StreamingTextResponse } from "ai";

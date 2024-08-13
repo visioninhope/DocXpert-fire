@@ -1,5 +1,5 @@
 import { env } from "@/env.mjs";
-import fireworks from "@/lib/fireworks";
+import {fireworks} from "@/lib/fireworks";
 import { getPineconeClient } from "@/lib/pinecone";
 import { authOptions } from "@/server/auth";
 import { prisma } from "@/server/db";

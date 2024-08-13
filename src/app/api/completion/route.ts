@@ -1,5 +1,5 @@
 import { env } from "@/env.mjs";
-import fireworks from "@/lib/fireworks";
+import {fireworks} from "@/lib/fireworks";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 
 export const runtime = "edge";
